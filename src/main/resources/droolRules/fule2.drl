@@ -1,0 +1,149 @@
+package com.wxy.droolsstudy
+dialect "java"
+
+import com.wxy.droolsstudy.entity.People
+import com.wxy.droolsstudy.entity.Person
+import java.util.List
+import static com.wxy.droolsstudy.utils.DroolsStringUtils.isEmpty
+
+global java.util.List myList
+
+////定义函数
+//function void hello(String name){
+//    System.out.println("hello ".concat(name));
+//}
+//
+//rule "man"
+//    when
+//        $p:People(sex == 1 , drlType == "people")
+//    then
+//       System.out.println($p.getName() + "是一个男孩");
+//end
+//rule "girl"
+//    when
+//        $p:People(sex == 0 , drlType == "people")
+//    then
+//        $p.setName("张晓芳"); //重新赋值
+//        System.out.println($p.getName() + "是一个女孩");
+//        hello($p.getName());
+//end
+////传入2个对象
+//rule "girlAndPerson"
+//    when
+//        $p:People(sex == 0 , drlType == "people") and $p1:Person(age > 10)
+//    then
+//        System.out.println($p.getName() + "是一个女孩,年龄：" + $p1.getAge());
+//end
+//rule "contains"
+//    when
+//        $name:String()
+//        $p:People(name contains $name)
+////        $p:People(name not contains $name)
+//    then
+//        System.out.println($p.getName() + "包含" + $name);
+//end
+//rule "memberOf"
+//    when
+//        $list:List()
+//        $p:People(name memberOf $list)
+////        $p:People(name not memberOf $list)
+//    then
+//        System.out.println("list集合包含" + $p.getName());
+//end
+//rule "matches"
+//    when
+//        $p:People(name matches "小.*")
+//    then
+//        System.out.println($p.getName() + "matches" + "小");
+//end
+////from
+//rule "from"
+//    when
+//        $list:List()
+//        $p:People(sex == 1) from $list
+//    then
+//        System.out.println($p.toString());
+//end
+//rule "collect"
+//    when
+//        $list:List() from collect(People(sex == 1))
+//    then
+//        System.out.println($list.toString());
+//end
+//
+//rule "accumulate"
+//  when
+//   $avg : Number() from accumulate(People(age >= 0 && $age : age),average($age))
+//   $sum : Number() from accumulate(People(age >= 0 && $age : age),sum($age))
+//  then
+//    System.out.println("accumulate成功执行，平均年龄为：" + $avg);
+//    System.out.println("accumulate成功执行，总年龄年龄为：" + $sum);
+//end
+
+rule "insert"
+  when
+      eval(true)
+  then
+     People p = new People();
+     p.setAge(10);
+     insert(p);
+end
+
+//
+//rule "update1"
+//  when
+//      $p:People(drlType == "update",sex == 0)
+//  then
+//      System.out.println("update1：" + $p);
+//      $p.setSex(1);
+//      update($p);
+//end
+//rule "update2"
+//  when
+//      $p:People(drlType == "update",sex == 1)
+//  then
+//      System.out.println("update2：" + $p);
+//end
+//rule "global"
+//  when
+//      $p:People()
+//  then
+//      myList.add($p);
+//end
+//
+//query "queryPeople" (String $name,Integer $sex)
+//    $p : People(name == $name, sex == $sex)
+//end
+//
+////自定义fact对象
+//declare Love
+//    feel : String
+//    continued : String
+//end
+//rule "love"
+//when
+//    $l : Love()
+//then
+//    System.out.println("自定义事件执行： " + $l);
+//end
+
+
+rule "no-loop-1"
+  no-loop true
+  lock-on-active true
+  when
+      $p:People(age > 10)
+  then
+      System.out.println("update1：" + $p);
+      $p.setAge(5);
+      update($p);
+end
+
+rule "no-loop-2"
+  when
+      $p:People(age <= 10)
+  then
+      System.out.println("update2：" + $p);
+      $p.setAge(15);
+      update($p);
+end

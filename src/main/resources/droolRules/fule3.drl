@@ -1,0 +1,41 @@
+package com.wxy.droolsstudy
+dialect "java"
+
+import com.wxy.droolsstudy.entity.Margin
+import java.util.List
+import static com.wxy.droolsstudy.utils.DroolsStringUtils.isEmpty
+
+function Integer sum(Integer num,Integer bicyclelow){
+    return  num * bicyclelow;
+}
+
+
+rule "20"
+    when $m:Margin(type == 0,bicyclelow == 20)
+    then
+        Integer sum = sum($m.getNum(),$m.getBicyclelow());
+        if(sum > 20000){
+            sum = 20000;
+        }
+        $m.setResult("保证金是：" + sum);
+        System.out.println($m);
+end
+
+rule "50"
+    when $m:Margin(type == 0,bicyclelow == 50)
+    then
+        Integer sum = sum($m.getNum(),$m.getBicyclelow());
+        $m.setResult("保证金是：" + sum);
+        System.out.println($m);
+end
+
+rule "100"
+    when $m:Margin(type == 0,bicyclelow == 100)
+    then
+        Integer sum = sum($m.getNum(),$m.getBicyclelow());
+        if(sum > 20000){
+            sum = 20000;
+        }
+        $m.setResult("保证金是：" + sum);
+        System.out.println($m);
+end
