@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class DroolsstudyApplicationTests {
@@ -277,5 +279,16 @@ class DroolsstudyApplicationTests {
         kieSession.insert(margin);
         kieSession.fireAllRules(new RuleNameEndsWithAgendaFilter("20"));
         System.out.println(margin);
+    }
+    @Test
+    public void Test10(){
+        Person p = new Person();
+        p.setAge(10);
+        kieSession.insert(p);
+        Map map = new HashMap();
+        map.put("p1","5");
+        kieSession.insert(map);
+        kieSession.fireAllRules();
+        kieSession.dispose();
     }
 }

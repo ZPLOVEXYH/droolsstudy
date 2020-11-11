@@ -28,8 +28,6 @@ public class DroolsUtils {
     @Autowired
     private KieBase kieBase;
 
-    private static final KieHelper kieHelper = new KieHelper();
-
     /**
      * 获取交互会话 kiesession
      * @return
@@ -77,6 +75,7 @@ public class DroolsUtils {
      * @param drls
      */
     public void addRulesToNewRuleBase(List<String> drls)  {
+        KieHelper kieHelper = new KieHelper();
         drls.forEach(e ->{
             kieHelper.addContent(e, ResourceType.DRL);
         });
