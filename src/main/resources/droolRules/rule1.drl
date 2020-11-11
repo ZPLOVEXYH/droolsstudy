@@ -1,17 +1,15 @@
 package com.wxy.personrules
 import com.wxy.droolsstudy.entity.Person
-global java.util.List myList
+//global java.util.List myList
 dialect  "java"
-function String myFun(Person p){
-    return p.getName();
-}
+//function String myFun(Person p){
+//    return p.getName();
+//}
 rule "age"
 no-loop true
 
     when
-        $p:Person((age<16 || age>50))
+        $p:Person(age == 10)
     then
-        myList.add($p);
-        System.out.println(myFun($p));
-        System.out.println($p);
+        System.out.println($p.getAge());
 end

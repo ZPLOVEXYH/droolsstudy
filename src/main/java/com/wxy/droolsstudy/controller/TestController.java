@@ -1,8 +1,14 @@
 package com.wxy.droolsstudy.controller;
 
 import com.wxy.droolsstudy.entity.Person;
+import com.wxy.droolsstudy.utils.DroolsUtils;
+import org.drools.core.impl.InternalKnowledgeBase;
+import org.kie.api.KieBase;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.builder.KnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.utils.KieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +31,9 @@ public class TestController {
     @Resource
     @Qualifier("kieSessionByDB")
     private KieSession kieSessionByDB;
+
+    @Autowired
+    private DroolsUtils droolsUtils;
 
     @RequestMapping("/test")
     public String test(Integer age){
@@ -88,5 +98,68 @@ public class TestController {
 
         return "DBtest"+age;
     }
+    @GetMapping("/test3")
+    public String test3(Integer age,String name){
+        Person person = new Person();
+        person.setAge(age);
+        person.setName("Test");
 
+        droolsUtils.execute(person,null);
+        return "DBtest"+age;
+    }
+    @GetMapping("/test4")
+    public String test4(Integer age) throws UnsupportedEncodingException {
+        String drl ="package com.wxy.personrules\n" +
+                "import com.wxy.droolsstudy.entity.Person\n" +
+                "//global java.util.List myList\n" +
+                "dialect  \"java\"\n" +
+                "//function String myFun(Person p){\n" +
+                "//    return p.getName();\n" +
+                "//}\n" +
+                "rule \"age1\"\n" +
+                "no-loop true\n" +
+                "\n" +
+                "    when\n" +
+                "        $p:Person(age > 10)\n" +
+                "    then\n" +
+                "        System.out.println($p.getAge());\n" +
+                "end";
+
+
+        Person person = new Person();
+        person.setAge(age);
+        person.setName("Test");
+        droolsUtils.addRule(drl);
+        droolsUtils.execute(person,null);
+        return "DBtest"+age;
+    }
+
+    @GetMapping("/test5")
+    public String test5(Integer age){
+        String drl ="package com.wxy.personrules\n" +
+                "import com.wxy.droolsstudy.entity.Person\n" +
+                "//global java.util.List myList\n" +
+                "dialect  \"java\"\n" +
+                "//function String myFun(Person p){\n" +
+                "//    return p.getName();\n" +
+                "//}\n" +
+                "rule \"age3\"\n" +
+                "no-loop true\n" +
+                "\n" +
+                "    when\n" +
+                "        $p:Person(age < 10)\n" +
+                "    then\n" +
+                "        System.out.println($p.getAge());\n" +
+                "end";
+        droolsUtils.addRulesToNewRuleBase(
+                new ArrayList<String>(){{
+                    add(drl);
+                }}
+        );
+        Person person = new Person();
+        person.setAge(age);
+        person.setName("Test");
+        droolsUtils.execute(person,null);
+        return "DBtest"+age;
+    }
 }
