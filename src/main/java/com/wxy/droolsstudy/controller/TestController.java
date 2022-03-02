@@ -1,6 +1,7 @@
 package com.wxy.droolsstudy.controller;
 
 import com.wxy.droolsstudy.entity.Person;
+import com.wxy.droolsstudy.entity.PersonOrder;
 import com.wxy.droolsstudy.utils.DroolsUtils;
 import org.drools.core.impl.InternalKnowledgeBase;
 import org.kie.api.KieBase;
@@ -36,26 +37,26 @@ public class TestController {
     private DroolsUtils droolsUtils;
 
     @RequestMapping("/test")
-    public String test(Integer age){
+    public String test(Integer age) {
         Person person = new Person();
         person.setAge(age);
         person.setName("Test");
 
-        Person person1 = new Person();
-        person1.setAge(15);
-        person1.setName("Test1");
-        List list = new ArrayList<>();
-        kieSession.setGlobal("myList",list);
+//        Person person1 = new Person();
+//        person1.setAge(15);
+//        person1.setName("Test1");
+//        List list = new ArrayList<>();
+//        kieSession.setGlobal("myList",list);
 
         kieSession.insert(person);
-        kieSession.insert(person1);
+//        kieSession.insert(person1);
         kieSession.fireAllRules();
-        System.out.println(list);
+//        System.out.println(list);
         return "Hello";
     }
 
     @RequestMapping("/test1")
-    public String test1(){
+    public String test1() {
         String myRule = "import com.asiainfo.bean.Person\n" +
                 "\n" +
                 "dialect  \"mvel\"\n" +
@@ -83,33 +84,39 @@ public class TestController {
     }
 
     @GetMapping("/test2")
-    public String test2(Integer age,String name){
+    public String test2(Integer age, String name) {
         Person person = new Person();
         person.setAge(age);
         person.setName("Test");
+//
+//        Person person1 = new Person();
+//        person.setAge(age);
+//        person.setName(name);
+//
+//        kieSessionByDB.insert(person);
+//        kieSessionByDB.insert(person1);
+//        kieSessionByDB.fireAllRules();
 
-        Person person1 = new Person();
-        person.setAge(age);
-        person.setName(name);
+        PersonOrder order = new PersonOrder();
+        kieSession.insert(order);
+        kieSession.fireAllRules();
 
-        kieSessionByDB.insert(person);
-        kieSessionByDB.insert(person1);
-        kieSessionByDB.fireAllRules();
-
-        return "DBtest"+age;
+        return "DBtest" + age;
     }
+
     @GetMapping("/test3")
-    public String test3(Integer age,String name){
+    public String test3(Integer age, String name) {
         Person person = new Person();
         person.setAge(age);
         person.setName("Test");
 
-        droolsUtils.execute(person,null);
-        return "DBtest"+age;
+        droolsUtils.execute(person, null);
+        return "DBtest" + age;
     }
+
     @GetMapping("/test4")
     public String test4(Integer age) throws UnsupportedEncodingException {
-        String drl ="package com.wxy.personrules\n" +
+        String drl = "package com.wxy.personrules\n" +
                 "import com.wxy.droolsstudy.entity.Person\n" +
                 "//global java.util.List myList\n" +
                 "dialect  \"java\"\n" +
@@ -130,13 +137,13 @@ public class TestController {
         person.setAge(age);
         person.setName("Test");
         droolsUtils.addRule(drl);
-        droolsUtils.execute(person,null);
-        return "DBtest"+age;
+        droolsUtils.execute(person, null);
+        return "DBtest" + age;
     }
 
     @GetMapping("/test5")
-    public String test5(Integer age){
-        String drl ="package com.wxy.personrules\n" +
+    public String test5(Integer age) {
+        String drl = "package com.wxy.personrules\n" +
                 "import com.wxy.droolsstudy.entity.Person\n" +
                 "//global java.util.List myList\n" +
                 "dialect  \"java\"\n" +
@@ -152,14 +159,14 @@ public class TestController {
                 "        System.out.println($p.getAge());\n" +
                 "end";
         droolsUtils.addRulesToNewRuleBase(
-                new ArrayList<String>(){{
+                new ArrayList<String>() {{
                     add(drl);
                 }}
         );
         Person person = new Person();
         person.setAge(age);
         person.setName("Test");
-        droolsUtils.execute(person,null);
-        return "DBtest"+age;
+        droolsUtils.execute(person, null);
+        return "DBtest" + age;
     }
 }

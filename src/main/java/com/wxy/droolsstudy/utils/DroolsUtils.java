@@ -30,41 +30,44 @@ public class DroolsUtils {
 
     /**
      * 获取交互会话 kiesession
+     *
      * @return
      */
-    public KieSession getKieSession(){
+    public KieSession getKieSession() {
         return kieBase.newKieSession();
     }
 
     /**
      * 添加单个规则到规则库
+     *
      * @param drl
      * @throws UnsupportedEncodingException
      */
 
     public void addRule(String drl) throws UnsupportedEncodingException {
         addRules(
-                new ArrayList<String>(){{
+                new ArrayList<String>() {{
                     add(drl);
                 }}
         );
     }
+
     /**
      * 添加多个规则到规则库
      */
-    public void addRules(List<String> drls)  {
+    public void addRules(List<String> drls) {
         KnowledgeBuilder kb = KnowledgeBuilderFactory.newKnowledgeBuilder();
-        drls.forEach(e ->{
+        drls.forEach(e -> {
             try {
                 kb.add(ResourceFactory.newByteArrayResource(e.getBytes("utf-8")), ResourceType.DRL);
             } catch (UnsupportedEncodingException unsupportedEncodingException) {
                 unsupportedEncodingException.printStackTrace();
-                log.info("unsupportedEncodingException={}",unsupportedEncodingException.getMessage());
+                log.info("unsupportedEncodingException={}", unsupportedEncodingException.getMessage());
             }
         });
         if (kb.hasErrors()) {
             String errorMessage = kb.getErrors().toString();
-            log.info("规则语法异常={}",errorMessage);
+            log.info("规则语法异常={}", errorMessage);
         }
         InternalKnowledgeBase kBase = (InternalKnowledgeBase) kieBase;
         kBase.addPackages(kb.getKnowledgePackages());
@@ -72,11 +75,12 @@ public class DroolsUtils {
 
     /**
      * 添加到新的规则库
+     *
      * @param drls
      */
-    public void addRulesToNewRuleBase(List<String> drls)  {
+    public void addRulesToNewRuleBase(List<String> drls) {
         KieHelper kieHelper = new KieHelper();
-        drls.forEach(e ->{
+        drls.forEach(e -> {
             kieHelper.addContent(e, ResourceType.DRL);
         });
         KieBase newKieBase = kieHelper.build();
@@ -85,36 +89,39 @@ public class DroolsUtils {
 
     /**
      * 执行单个对象
-     * @param obj 交互对象
+     *
+     * @param obj      交互对象
      * @param ruleName 需要执行的规则名称
      */
-    public void execute(Object obj,String ruleName){
+    public void execute(Object obj, String ruleName) {
         executeMore(
-                new ArrayList<Object>(){{
+                new ArrayList<Object>() {{
                     add(obj);
                 }},
                 ruleName
         );
     }
+
     /**
      * 执行多个对象
+     *
      * @param list
      * @param ruleName 需要执行的规则名称
      */
-    public void executeMore(List<Object> list,String ruleName){
+    public void executeMore(List<Object> list, String ruleName) {
         KieSession kieSession = getKieSession();
         try {
-            list.forEach(e ->{
+            list.forEach(e -> {
                 kieSession.insert(e);
             });
-            if(StringUtils.isNoneBlank(ruleName)){
+            if (StringUtils.isNoneBlank(ruleName)) {
                 kieSession.fireAllRules(new RuleNameEndsWithAgendaFilter(ruleName));
-            }else{
+            } else {
                 kieSession.fireAllRules();
             }
-        }catch (Exception e){
-            log.info("执行异常list={},e={}",list,e);
-        }finally {
+        } catch (Exception e) {
+            log.info("执行异常list={},e={}", list, e);
+        } finally {
             kieSession.dispose();
         }
     }
@@ -122,10 +129,10 @@ public class DroolsUtils {
     /**
      * 执行自定义对象
      */
-    public void executeCustomObj(Map<String,Object> objectMap,String packageName,String customObjName) throws IllegalAccessException, InstantiationException {
-        FactType factType = kieBase.getFactType(packageName,customObjName);
+    public void executeCustomObj(Map<String, Object> objectMap, String packageName, String customObjName) throws IllegalAccessException, InstantiationException {
+        FactType factType = kieBase.getFactType(packageName, customObjName);
         Object obj = factType.newInstance();
-        factType.setFromMap(obj,objectMap);
+        factType.setFromMap(obj, objectMap);
         KieSession kieSession = getKieSession();
         kieSession.insert(factType);
         kieSession.fireAllRules();

@@ -1,0 +1,117 @@
+package com.wxy.personrules
+import com.wxy.droolsstudy.entity.Person
+import com.wxy.droolsstudy.entity.PersonOrder
+import java.util.Map
+import java.util.List
+import java.util.Set
+dialect  "java"
+//rule "test01"
+//    when
+//        $p:Person(age == 10)
+//    then
+////        $p.setAge(20);
+////        update($p);
+//        System.out.println("test01的结果：" + $p.getAge());
+//end
+
+//rule "test02"
+//    when
+//        $p:Person(age == 20)
+//    then
+//        System.out.println("test02执行成功");
+//end
+//
+//rule "test03"
+//    when
+//        $p:Person(age == 20)
+//        PersonOrder(person == $p)
+//    then
+//        System.out.println("test03执行成功");
+//end
+//
+//
+//rule "test04"
+//    when
+//        //%取模运算需要加括号()
+//        $p:Person((age%2) == 0)
+//    then
+//        System.out.println("test04执行成功");
+//end
+//
+//rule "test05"
+//    when
+//        Person(name contains "张")
+//    then
+//        System.out.println("test05执行成功");
+//end
+//
+//rule "test06"
+//    when
+////        $p:Person(list[0] == 1);
+////        $p:Person(set.iterator().next() == 1);  错误，不能在LHS部分获取元素
+//        $p:Person(map["一班"] == 1);
+//    then
+////        System.out.println("test06执行成功"+$p.getList().get(0));
+//        System.out.println("test06执行成功"+$p.getSet().iterator().next());
+//end
+//
+//rule "test07"
+//    when
+////        Person(name str[length] 2)
+//        Person(name str[startsWith] "张")
+//    then
+//        System.out.println("test07执行成功");
+//end
+
+
+//rule "test08"
+//    when
+//        //工作内存中多个list会同时匹配，以最后一个list先匹配
+//        $list:List();
+//    then
+//        System.out.println("test08执行成功:" + $list.get(0));
+//end
+
+//rule "test09"
+////    no-loop true
+//    lock-on-active true
+//    when
+////         $p:Person(age == 10)
+//         $p:Person(name == "张三")
+////         $p:Person(name == "张三",age == 10)
+//    then
+//        //当更新fact事实后，嗲用update或者insert等函数，会重新出发规则的匹配，但是约束条件中比较必须包含的修改的的属性，才会重新匹配
+//        $p.setAge(10);
+//        update($p);
+//        System.out.println("test09执行成功");
+//end
+//
+//rule "test10"
+//    lock-on-active true
+//    when
+//
+//    then
+//        System.out.println("调用规则名称" + drools.getRule().getName());
+//end
+
+//rule "test011"
+//    when
+//        $p:Person()
+//    then
+//        System.out.println("test011的结果：success");
+//end
+//
+//rule "test012"
+//    when
+//        $p:PersonOrder()
+//    then
+//        System.out.println("test012的结果：success");
+//end
+//
+//rule "test013"
+//    when
+//        $p:Person();
+//        $pp:PersonOrder();
+//    then
+//        System.out.println("test013的结果：success");
+//end

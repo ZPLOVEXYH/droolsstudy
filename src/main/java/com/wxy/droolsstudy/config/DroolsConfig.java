@@ -32,12 +32,13 @@ public class DroolsConfig {
     private final KieServices kieServices = KieServices.Factory.get();
 
     @Bean
-    public DroolRulesService droolRulesService(){
+    public DroolRulesService droolRulesService() {
         return new DroolRulesServiceImpl();
     }
 
     /**
      * 指定规则路径
+     *
      * @return
      * @throws IOException
      */
@@ -53,6 +54,7 @@ public class DroolsConfig {
         }
         return kieFileSystem;
     }
+
     @Bean
     public KieContainer kieContainer() throws IOException {
         KieRepository kieRepository = kieServices.getRepository();
@@ -61,10 +63,12 @@ public class DroolsConfig {
         kieBuilder.buildAll();
         return kieServices.newKieContainer(kieRepository.getDefaultReleaseId());
     }
+
     @Bean
     public KieBase kieBase() throws IOException {
         return kieContainer().getKieBase();
     }
+
     @Bean
     public KieSession kieSession() throws IOException {
         return kieContainer().newKieSession();

@@ -1,0 +1,16 @@
+//package com.wxy.personrules
+//import com.wxy.droolsstudy.entity.Person
+//import java.util.Map
+////global java.util.List myList
+//dialect  "java"
+////function String myFun(Person p){
+////    return p.getName();
+////}
+//rule "age"
+//no-loop true
+//    when
+//        $p:Person()
+//        $map:Map(this["p1"] == "5")
+//    then
+//        System.out.println($p.getAge());
+//end

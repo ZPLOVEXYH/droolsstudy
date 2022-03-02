@@ -1,0 +1,215 @@
+package com.hly.drools.card
+dialect "java"
+
+declare CardChangeFee
+    //更换类型
+    orderType: Object
+    //质保期
+    guaranteeStatus: Object
+    //原因
+    manMade: Object
+    //领取方式
+    receiveMethod: Object
+    //推荐人
+    hasAfterSale: Object
+    //回收选择
+    obuSelect: Object
+    //回寄
+    sendBack: Object
+    //卡片类型
+    etcChannel: Object
+    //卡片服务费
+    cardFee: Object
+    //OBU费用
+    obuFee: Object
+    //三方设备费
+    cqObuFee:Object
+    //三方信息费
+    cqMsgFee:Object
+    //三方制卡费
+    cqCardFee:Object
+    //卡片回收
+    cardBack: Object
+    //OBU回收
+    obuBack:Object
+    //退款金额
+    refundFee:Object
+end
+
+//换卡
+rule "orderType_rule_1"
+    when $s: CardChangeFee(orderType==1,guaranteeStatus==1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCardFee(30);
+        $s.setCardBack("否");
+        System.out.println("执行了orderType_rule_1");
+end
+
+rule "orderType_rule_2"
+    when $s: CardChangeFee(orderType==1,guaranteeStatus == 2,etcChannel != 6)
+    then
+        $s.setCardFee(30);
+        $s.setCardBack("否");
+        System.out.println("orderType_rule_2");
+end
+
+rule "orderType_rule_3"
+    when $s: CardChangeFee(orderType==1,guaranteeStatus == 2,etcChannel == 6)
+    then
+        $s.setCardFee(10);
+        $s.setCqCardFee(20);
+        $s.setCardBack("否");
+        System.out.println("orderType_rule_3");
+end
+
+//换签 质保期内
+
+//非人为邮寄
+rule "orderType_rule_4"
+    when $s: CardChangeFee(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 1,sendBack==0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setObuFee(210);
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_4");
+end
+rule "orderType_rule_5"
+    when $s: CardChangeFee(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 1,sendBack==1,etcChannel >=1 && etcChannel <=8)
+    then
+         $s.setObuFee(210);
+         $s.setObuBack("否");
+         $s.setRefundFee(190);
+         System.out.println("orderType_rule_5");
+end
+//非人为网点自取
+rule "orderType_rule_6"
+    when $s: CardChangeFee(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true || hasAfterSale == false,obuSelect == 0,sendBack==0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setObuFee(210);
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_6");
+end
+rule "orderType_rule_7"
+    when $s: CardChangeFee(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 0,sendBack==1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setObuFee(210);
+        $s.setObuBack("否");
+        $s.setRefundFee(210);
+        System.out.println("orderType_rule_7");
+end
+rule "orderType_rule_8"
+    when $s: CardChangeFee(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setObuBack("是");
+        System.out.println("orderType_rule_8");
+end
+//人为
+rule "orderType_rule_9"
+    when $s: CardChangeFee(orderType==2,guaranteeStatus == 1,manMade == true,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setObuFee(210);
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_9");
+end
+
+//保质期外
+rule "orderType_rule_10"
+    when $s: CardChangeFee(orderType==2,guaranteeStatus == 2,etcChannel !=6)
+    then
+        $s.setObuFee(210);
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_10");
+end
+
+rule "orderType_rule_11"
+    when $s: CardChangeFee(orderType==2,guaranteeStatus == 2,etcChannel == 6)
+    then
+        $s.setObuFee(100);
+        $s.setCqObuFee(90);
+        $s.setCqMsgFee(20);
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_11");
+end
+
+//换卡换签
+//保质期内 非人为 邮寄
+rule "orderType_rule_12"
+    when $s: CardChangeFee(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 1,sendBack==0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCardFee(30);
+        $s.setObuFee(210);
+        $s.setCardBack("否");
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_12");
+end
+rule "orderType_rule_13"
+    when $s: CardChangeFee(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 1,sendBack==1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCardFee(30);
+        $s.setObuFee(210);
+        $s.setCardBack("否");
+        $s.setObuBack("否");
+        $s.setRefundFee(210);
+        System.out.println("orderType_rule_13");
+end
+//保质期内 非人为 网点自取
+rule "orderType_rule_14"
+    when $s: CardChangeFee(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true || hasAfterSale == false,obuSelect == 0,sendBack==0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCardFee(30);
+        $s.setObuFee(210);
+        $s.setCardBack("否");
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_14");
+end
+rule "orderType_rule_15"
+    when $s: CardChangeFee(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 0,sendBack==1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCardFee(30);
+        $s.setObuFee(210);
+        $s.setCardBack("否");
+        $s.setObuBack("否");
+        $s.setRefundFee(210);
+        System.out.println("orderType_rule_15");
+end
+rule "orderType_rule_16"
+    when $s: CardChangeFee(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCardFee(30);
+        $s.setCardBack("否");
+        $s.setObuBack("是");
+        System.out.println("orderType_rule_16");
+end
+
+//保质期内 人为
+rule "orderType_rule_17"
+    when $s: CardChangeFee(orderType==3,guaranteeStatus == 1,manMade == true,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCardFee(30);
+        $s.setObuFee(210);
+        $s.setCardBack("否");
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_17");
+end
+
+//保质期外
+rule "orderType_rule_18"
+    when $s: CardChangeFee(orderType==3,guaranteeStatus == 2,etcChannel != 6)
+    then
+        $s.setCardFee(30);
+        $s.setObuFee(210);
+        $s.setCardBack("否");
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_18");
+end
+rule "orderType_rule_19"
+    when $s: CardChangeFee(orderType==3,guaranteeStatus == 2,etcChannel == 6)
+    then
+        $s.setCardFee(10);
+        $s.setObuFee(100);
+        $s.setCqObuFee(90);
+        $s.setCqMsgFee(20);
+        $s.setCqCardFee(20);
+        $s.setCardBack("否");
+        $s.setObuBack("否");
+        System.out.println("orderType_rule_19");
+end

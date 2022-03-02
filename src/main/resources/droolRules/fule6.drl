@@ -1,0 +1,15 @@
+//package com.wxy.personrules
+//import com.wxy.droolsstudy.entity.Person
+//import com.wxy.droolsstudy.entity.PersonOrder
+//import java.util.Map
+//import java.util.List
+//import java.util.Set
+//dialect  "java"
+//rule "test011"
+//    when
+//        $p:Person()
+//    then
+//        $p.setAge(20);
+//        update($p)
+//        System.out.println("test011的结果：success");
+//end

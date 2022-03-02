@@ -1,7 +1,7 @@
-package com.hly.drools.earnestmoneyrule.test
-rule "test01"
-when
-    eval(true)
-then
-    System.out.println("测试执行成功");
-end
+//package com.hly.drools.earnestmoneyrule.test
+//rule "test01"
+//when
+//    eval(true)
+//then
+//    System.out.println("测试执行成功");
+//end
