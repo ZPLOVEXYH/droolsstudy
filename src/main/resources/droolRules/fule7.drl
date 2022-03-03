@@ -34,6 +34,8 @@ declare CardChangeFee
     obuBack:Object
     //退款金额
     refundFee:Object
+    //注销服务费
+    cancelFee:Object
 end
 
 //换卡
@@ -212,4 +214,30 @@ rule "cardChangeFee_rule_19"
         $s.setCardBack("否");
         $s.setObuBack("否");
         System.out.println("cardChangeFee_rule_19");
+end
+//销卡有obu
+rule "cardChangeFee_rule_20"
+    when $s: CardChangeFee(orderType==7,guaranteeStatus == 1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCancelFee(300);
+        System.out.println("cardChangeFee_rule_20");
+end
+rule "cardChangeFee_rule_21"
+    when $s: CardChangeFee(orderType==7,guaranteeStatus == 2,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCancelFee(0);
+        System.out.println("cardChangeFee_rule_21");
+end
+//销卡无obu
+rule "cardChangeFee_rule_22"
+    when $s: CardChangeFee(orderType==8,guaranteeStatus == 1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCancelFee(30);
+        System.out.println("cardChangeFee_rule_22");
+end
+rule "cardChangeFee_rule_23"
+    when $s: CardChangeFee(orderType==8,guaranteeStatus == 2,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setCancelFee(0);
+        System.out.println("cardChangeFee_rule_23");
 end
