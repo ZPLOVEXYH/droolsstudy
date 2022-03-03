@@ -36,6 +36,8 @@ declare CardChangeFee
     refundFee:Object
     //注销服务费
     cancelFee:Object
+    //提示信息
+    tipsInfo:Object
 end
 
 //换卡
@@ -44,6 +46,7 @@ rule "cardChangeFee_rule_1"
     then
         $s.setCardFee(30);
         $s.setCardBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。卡片售后服务费：30元/张");
         System.out.println("执行了cardChangeFee_rule_1");
 end
 
@@ -52,6 +55,7 @@ rule "cardChangeFee_rule_2"
     then
         $s.setCardFee(30);
         $s.setCardBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。卡片售后服务费：30元/张");
         System.out.println("cardChangeFee_rule_2");
 end
 
@@ -61,6 +65,9 @@ rule "cardChangeFee_rule_3"
         $s.setCardFee(10);
         $s.setCqCardFee(20);
         $s.setCardBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：10元/张\n" +
+                        "请关注微信公众号“重庆高速ETC”，充值卡费（20元），以保证您的设备及时更换完成。");
         System.out.println("cardChangeFee_rule_3");
 end
 
@@ -72,6 +79,8 @@ rule "cardChangeFee_rule_4"
     then
         $s.setObuFee(210);
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。 \n" +
+                        "OBU售后服务费：210元/个");
         System.out.println("cardChangeFee_rule_4");
 end
 rule "cardChangeFee_rule_5"
@@ -80,6 +89,9 @@ rule "cardChangeFee_rule_5"
          $s.setObuFee(210);
          $s.setObuBack("否");
          $s.setRefundFee(190);
+         $s.setTipsInfo("提交成功，请在订单提交后10日内，通过我的订单填写回寄信息。详询0551-66775656/62620561。\n" +
+                         "OBU售后服务费：210元/个\n" +
+                         "预收OBU设备更换费，设备回收确认后可退费190元，15日内未收到设备将不予退费。");
          System.out.println("cardChangeFee_rule_5");
 end
 //非人为网点自取
@@ -88,6 +100,8 @@ rule "cardChangeFee_rule_6"
     then
         $s.setObuFee(210);
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。 \n" +
+                        "OBU售后服务费：210元/个");
         System.out.println("cardChangeFee_rule_6");
 end
 rule "cardChangeFee_rule_7"
@@ -96,12 +110,18 @@ rule "cardChangeFee_rule_7"
         $s.setObuFee(210);
         $s.setObuBack("否");
         $s.setRefundFee(210);
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。 \n" +
+                        "OBU售后服务费：210元/个\n" +
+                        "预收OBU设备更换费，设备回收确认后可退费，15日内未收到设备将不予退费。");
         System.out.println("cardChangeFee_rule_7");
 end
 rule "cardChangeFee_rule_8"
     when $s: CardChangeFee(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 1,etcChannel >=1 && etcChannel <=8)
     then
         $s.setObuBack("是");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：30元/张   \n" +
+                        "OBU售后服务费：0元/个");
         System.out.println("cardChangeFee_rule_8");
 end
 //人为
@@ -110,6 +130,8 @@ rule "cardChangeFee_rule_9"
     then
         $s.setObuFee(210);
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。  \n" +
+                        "OBU售后服务费：210元/个");
         System.out.println("cardChangeFee_rule_9");
 end
 
@@ -119,6 +141,8 @@ rule "cardChangeFee_rule_10"
     then
         $s.setObuFee(210);
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "OBU售后服务费：210元/个");
         System.out.println("cardChangeFee_rule_10");
 end
 
@@ -129,6 +153,9 @@ rule "cardChangeFee_rule_11"
         $s.setCqObuFee(90);
         $s.setCqMsgFee(20);
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "OBU售后服务费：100元/个\n" +
+                        "请关注微信公众号“重庆高速ETC”，充值OBU设备费（110元），以保证您的设备及时更换完成。");
         System.out.println("cardChangeFee_rule_11");
 end
 
@@ -141,6 +168,9 @@ rule "cardChangeFee_rule_12"
         $s.setObuFee(210);
         $s.setCardBack("否");
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：30元/张   \n" +
+                        "OBU售后服务费：210元/个");
         System.out.println("cardChangeFee_rule_12");
 end
 rule "cardChangeFee_rule_13"
@@ -151,6 +181,10 @@ rule "cardChangeFee_rule_13"
         $s.setCardBack("否");
         $s.setObuBack("否");
         $s.setRefundFee(210);
+        $s.setTipsInfo("提交成功，请在订单提交后10日内，通过我的订单填写回寄信息。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：30元/张   \n" +
+                        "OBU售后服务费：210元/个\n" +
+                        "预收OBU设备更换费，设备回收确认后可退费，15日内未收到设备将不予退费。");
         System.out.println("cardChangeFee_rule_13");
 end
 //保质期内 非人为 网点自取
@@ -161,6 +195,9 @@ rule "cardChangeFee_rule_14"
         $s.setObuFee(210);
         $s.setCardBack("否");
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：30元/张   \n" +
+                        "OBU售后服务费：210元/个");
         System.out.println("cardChangeFee_rule_14");
 end
 rule "cardChangeFee_rule_15"
@@ -171,6 +208,10 @@ rule "cardChangeFee_rule_15"
         $s.setCardBack("否");
         $s.setObuBack("否");
         $s.setRefundFee(210);
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：30元/张   \n" +
+                        "OBU售后服务费：210元/个\n" +
+                        "预收OBU设备更换费，设备回收确认后可退费，15日内未收到设备将不予退费。");
         System.out.println("cardChangeFee_rule_15");
 end
 rule "cardChangeFee_rule_16"
@@ -179,6 +220,9 @@ rule "cardChangeFee_rule_16"
         $s.setCardFee(30);
         $s.setCardBack("否");
         $s.setObuBack("是");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：30元/张   \n" +
+                        "OBU售后服务费：0元/个");
         System.out.println("cardChangeFee_rule_16");
 end
 
@@ -190,6 +234,9 @@ rule "cardChangeFee_rule_17"
         $s.setObuFee(210);
         $s.setCardBack("否");
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：30元/张   \n" +
+                        "OBU售后服务费：210元/个");
         System.out.println("cardChangeFee_rule_17");
 end
 
@@ -201,6 +248,9 @@ rule "cardChangeFee_rule_18"
         $s.setObuFee(210);
         $s.setCardBack("否");
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                                "卡片售后服务费：30元/张   \n" +
+                                "OBU售后服务费：210元/个");
         System.out.println("cardChangeFee_rule_18");
 end
 rule "cardChangeFee_rule_19"
@@ -213,6 +263,10 @@ rule "cardChangeFee_rule_19"
         $s.setCqCardFee(20);
         $s.setCardBack("否");
         $s.setObuBack("否");
+        $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
+                        "卡片售后服务费：10元/张    \n" +
+                        "OBU售后服务费：100元/个\n" +
+                        "请关注微信公众号“重庆高速ETC”，充值卡签费用（130元），以保证您的设备及时更换完成。");
         System.out.println("cardChangeFee_rule_19");
 end
 //销卡有obu
