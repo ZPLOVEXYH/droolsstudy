@@ -120,7 +120,6 @@ rule "cardChangeFee_rule_8"
     then
         $s.setObuBack("是");
         $s.setTipsInfo("提交成功，请耐心等待审核结果。详询0551-66775656/62620561。\n" +
-                        "卡片售后服务费：30元/张   \n" +
                         "OBU售后服务费：0元/个");
         System.out.println("cardChangeFee_rule_8");
 end
