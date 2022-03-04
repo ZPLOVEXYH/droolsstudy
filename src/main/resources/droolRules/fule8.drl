@@ -1,0 +1,151 @@
+package com.hly.drools.store
+dialect "java"
+
+declare StoreRule
+    //更换类型
+    orderType: Object
+    //质保期
+    guaranteeStatus: Object
+    //原因
+    manMade: Object
+    //领取方式
+    receiveMethod: Object
+    //推荐人
+    hasAfterSale: Object
+    //回收选择
+    obuSelect: Object
+    //回寄
+    sendBack: Object
+    //卡片类型
+    etcChannel: Object
+    //发行售后卡
+    afterSaleCard:Object
+    //发行售后obu
+    afterSaleObu:Object
+    //发行回收入库：
+    issuedRecycleStore:Object
+    //退款人回收入库：
+    refundRecycleStore:Object
+    //退款入口显示
+    refundShow:Object
+    //退款金额
+    refundFee:Object
+end
+
+//换卡
+rule "store_rule_1"
+    when $s: StoreRule(orderType==1,guaranteeStatus==1 || guaranteeStatus == 2,obuSelect == 0 ,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleCard(-1);
+        System.out.println("执行了store_rule_1");
+end
+
+//换签 质保期内
+
+//非人为邮寄
+rule "store_rule_2"
+    when $s: StoreRule(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 1,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleObu(-1);
+        $s.setRefundRecycleStore(1);
+        $s.setRefundShow("是");
+        $s.setRefundFee(190);
+        System.out.println("store_rule_2");
+end
+
+//非人为网点自取
+rule "store_rule_3"
+    when $s: StoreRule(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleObu(-1);
+        System.out.println("store_rule_3");
+end
+rule "store_rule_4"
+    when $s: StoreRule(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleObu(-1);
+        $s.setRefundRecycleStore(1);
+        $s.setRefundShow("是");
+        $s.setRefundFee(210);
+        System.out.println("store_rule_4");
+end
+rule "store_rule_5"
+    when $s: StoreRule(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleObu(-1);
+        $s.setIssuedRecycleStore(1);
+        System.out.println("store_rule_5");
+end
+//人为
+rule "store_rule_6"
+    when $s: StoreRule(orderType==2,guaranteeStatus == 1,manMade == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleObu(-1);
+        System.out.println("store_rule_6");
+end
+
+//保质期外
+rule "store_rule_7"
+    when $s: StoreRule(orderType==2,guaranteeStatus == 2,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleObu(-1);
+        System.out.println("store_rule_7");
+end
+
+//换卡换签
+//保质期内 非人为 邮寄
+rule "store_rule_8"
+    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 1,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleCard(-1);
+        $s.setAfterSaleObu(-1);
+        $s.setRefundRecycleStore(1);
+        $s.setRefundShow("是");
+        $s.setRefundFee(210);
+        System.out.println("store_rule_8");
+end
+
+//网点自取
+rule "store_rule_9"
+    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleCard(-1);
+        $s.setAfterSaleObu(-1);
+        System.out.println("store_rule_9");
+end
+
+rule "store_rule_10"
+    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleCard(-1);
+        $s.setAfterSaleObu(-1);
+        $s.setRefundRecycleStore(1);
+        $s.setRefundShow("是");
+        $s.setRefundFee(210);
+        System.out.println("store_rule_10");
+end
+rule "store_rule_11"
+    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 1,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleCard(-1);
+        $s.setAfterSaleObu(-1);
+        $s.setIssuedRecycleStore(1);
+        System.out.println("store_rule_11");
+end
+//人为
+rule "store_rule_12"
+    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleCard(-1);
+        $s.setAfterSaleObu(-1);
+        System.out.println("store_rule_12");
+end
+
+//保质期外
+rule "store_rule_13"
+    when $s: StoreRule(orderType==3,guaranteeStatus == 2,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    then
+        $s.setAfterSaleCard(-1);
+        $s.setAfterSaleObu(-1);
+        System.out.println("store_rule_13");
+end

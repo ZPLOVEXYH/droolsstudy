@@ -376,14 +376,15 @@ class DroolsstudyApplicationTests {
      */
     @Test
     public void Test13() throws IllegalAccessException, InstantiationException {
-        FactType factType = kieBase.getFactType("com.hly.drools.card", "CardChangeFee");
+//        FactType factType = kieBase.getFactType("com.hly.drools.card", "CardChangeFee");
+        FactType factType = kieBase.getFactType("com.hly.drools.store", "StoreRule");
         Object obj = factType.newInstance();
         factType.set(obj, "orderType", "3");
         factType.set(obj, "guaranteeStatus", 2);
 //        factType.set(obj, "manMade", true);
 //        factType.set(obj, "receiveMethod", 2);
 //        factType.set(obj, "hasAfterSale", false);
-//        factType.set(obj, "obuSelect", 1);
+        factType.set(obj, "obuSelect", 0);
 //        factType.set(obj, "sendBack", 1);
         factType.set(obj, "etcChannel", "8");
         kieSession.insert(obj);
