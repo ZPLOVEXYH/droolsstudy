@@ -95,7 +95,7 @@ end
 //换卡换签
 //保质期内 非人为 邮寄
 rule "store_rule_8"
-    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 1,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == false,receiveMethod == 1,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleCard(-1);
         $s.setAfterSaleObu(-1);
@@ -107,7 +107,7 @@ end
 
 //网点自取
 rule "store_rule_9"
-    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleCard(-1);
         $s.setAfterSaleObu(-1);
@@ -115,7 +115,7 @@ rule "store_rule_9"
 end
 
 rule "store_rule_10"
-    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleCard(-1);
         $s.setAfterSaleObu(-1);
@@ -125,7 +125,7 @@ rule "store_rule_10"
         System.out.println("store_rule_10");
 end
 rule "store_rule_11"
-    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 1,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 1,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleCard(-1);
         $s.setAfterSaleObu(-1);
@@ -134,7 +134,7 @@ rule "store_rule_11"
 end
 //人为
 rule "store_rule_12"
-    when $s: StoreRule(orderType==3,guaranteeStatus == 1,manMade == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleCard(-1);
         $s.setAfterSaleObu(-1);
@@ -143,7 +143,7 @@ end
 
 //保质期外
 rule "store_rule_13"
-    when $s: StoreRule(orderType==3,guaranteeStatus == 2,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==5,guaranteeStatus == 2,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleCard(-1);
         $s.setAfterSaleObu(-1);
