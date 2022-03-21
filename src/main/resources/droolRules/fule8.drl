@@ -63,7 +63,7 @@ end
 
 //非人为网点自取
 rule "store_rule_3_0"
-    when $s: StoreRule(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==2,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true,obuSelect == 0,sendBack==0,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleObu(-1);
         System.out.println("store_rule_3_0");
@@ -131,7 +131,7 @@ end
 
 //网点自取
 rule "store_rule_9_0"
-    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == true,obuSelect == 0,sendBack==0,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleCard(-1);
         $s.setAfterSaleObu(-1);
@@ -147,7 +147,7 @@ rule "store_rule_9_1"
 end
 
 rule "store_rule_10"
-    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 0,etcChannel >=1 && etcChannel <=8)
+    when $s: StoreRule(orderType==5,guaranteeStatus == 1,manMade == false,receiveMethod == 2,hasAfterSale == false,obuSelect == 0,sendBack==1,etcChannel >=1 && etcChannel <=8)
     then
         $s.setAfterSaleCard(-1);
         $s.setAfterSaleObu(-1);
