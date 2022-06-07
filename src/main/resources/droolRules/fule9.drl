@@ -1,0 +1,95 @@
+package com.hly.drools.card
+dialect "java"
+
+declare CardSignDepositRule
+    //特殊审批 是否特殊审批(1,是 2,否)
+    approvalFlag: Object
+    approvalStrategy: Object
+    //担保函 是否有担保函(1,是 2,否)
+    guaranteeFlag: Object
+    //新代理 0老代理 1新代理
+    newAegency: Object
+     //积分
+    integral: Object
+    //卡签数量
+    cardCount: Object
+    //每套对应价格
+    cardPrice: Object
+    //保证金膨胀
+    cashDeposit: Object
+
+
+end
+
+rule "card_sign_rule_1"
+    when $s: CardSignDepositRule(approvalFlag==2,guaranteeFlag==2)
+    then
+        $s.setCardPrice("9001:180,9005:130,9002:180,9003:80,9006:130,9007:50,9004:150");
+        System.out.println("执行了card_sign_rule_1");
+end
+//新代理
+rule "card_sign_rule_2"
+    when $s: CardSignDepositRule(approvalFlag==2,guaranteeFlag==1,newAegency == 1,cardCount<=10)
+    then
+        $s.setCardPrice("0");
+        System.out.println("执行了card_sign_rule_2");
+end
+rule "card_sign_rule_3"
+    when $s: CardSignDepositRule(approvalFlag==2,guaranteeFlag==1,newAegency == 1,cardCount>10)
+    then
+        $s.setCardPrice("9001:180,9005:130,9002:180,9003:80,9006:130,9007:50,9004:150");
+        System.out.println("执行了card_sign_rule_3");
+end
+//老代理 >=600
+rule "card_sign_rule_4"
+    when $s: CardSignDepositRule(approvalFlag==2,guaranteeFlag==1,newAegency == 0,integral>=600,cardCount<=200)
+    then
+        $s.setCardPrice("40");
+        System.out.println("执行了card_sign_rule_4");
+end
+rule "card_sign_rule_5"
+    when $s: CardSignDepositRule(approvalFlag==2,guaranteeFlag==1,newAegency == 1,integral>=600,cardCount>200)
+    then
+        $s.setCardPrice("9001:180,9005:130,9002:180,9003:80,9006:130,9007:50,9004:150");
+        System.out.println("执行了card_sign_rule_5");
+end
+//<600
+rule "card_sign_rule_6"
+    when $s: CardSignDepositRule(approvalFlag==2,guaranteeFlag==1,newAegency == 1,integral<600,cardCount<=200)
+    then
+        $s.setCardPrice("50");
+        System.out.println("执行了card_sign_rule_6");
+end
+rule "card_sign_rule_7"
+    when $s: CardSignDepositRule(approvalFlag==2,guaranteeFlag==1,newAegency == 1,integral<600,cardCount>200)
+    then
+        $s.setCardPrice("9001:180,9005:130,9002:180,9003:80,9006:130,9007:50,9004:150");
+        System.out.println("执行了card_sign_rule_7");
+end
+//是特殊审批
+rule "card_sign_rule_8"
+    when $s: CardSignDepositRule(approvalFlag==1,approvalStrategy == 1)
+    then
+        $s.setCardPrice("60");
+        System.out.println("执行了card_sign_rule_8");
+end
+rule "card_sign_rule_9"
+    when $s: CardSignDepositRule(approvalFlag==1,approvalStrategy == 2,cardCount<=200)
+    then
+        $s.setCardPrice("60");
+        System.out.println("执行了card_sign_rule_9");
+end
+rule "card_sign_rule_10"
+    when $s: CardSignDepositRule(approvalFlag==1,approvalStrategy == 2,cardCount>200)
+    then
+        $s.setCardPrice("9001:180,9005:130,9002:180,9003:80,9006:130,9007:50,9004:150");
+        System.out.println("执行了card_sign_rule_10");
+end
+
+rule "card_sign_rule_11"
+    when $s: CardSignDepositRule(approvalFlag==1,approvalStrategy == 3)
+    then
+        $s.setCardPrice("9001:180,9005:130,9002:180,9003:80,9006:130,9007:50,9004:150");
+        $s.setCashDeposit("1.5");
+        System.out.println("执行了card_sign_rule_11");
+end

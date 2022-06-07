@@ -379,14 +379,29 @@ class DroolsstudyApplicationTests {
 //        FactType factType = kieBase.getFactType("com.hly.drools.card", "CardChangeFee");
         FactType factType = kieBase.getFactType("com.hly.drools.store", "StoreRule");
         Object obj = factType.newInstance();
-        factType.set(obj, "orderType", "3");
-        factType.set(obj, "guaranteeStatus", 2);
-//        factType.set(obj, "manMade", true);
-//        factType.set(obj, "receiveMethod", 2);
-//        factType.set(obj, "hasAfterSale", false);
+        factType.set(obj, "orderType", "5");
+        factType.set(obj, "guaranteeStatus", 1);
+        factType.set(obj, "manMade", false);
+        factType.set(obj, "receiveMethod", 2);
+        factType.set(obj, "hasAfterSale", false);
         factType.set(obj, "obuSelect", 0);
-//        factType.set(obj, "sendBack", 1);
-        factType.set(obj, "etcChannel", "8");
+        factType.set(obj, "sendBack", 0);
+        factType.set(obj, "etcChannel", "6");
+        kieSession.insert(obj);
+        int count = kieSession.fireAllRules();
+
+        Map<String, Object> resMap = factType.getAsMap(obj);
+
+        System.out.println("匹配了规则数量：" + count);
+        System.out.println(resMap);
+    }
+    @Test
+    public void Test14() throws IllegalAccessException, InstantiationException {
+//        FactType factType = kieBase.getFactType("com.hly.drools.card", "CardChangeFee");
+        FactType factType = kieBase.getFactType("com.hly.drools.card", "CardSignDepositRule");
+        Object obj = factType.newInstance();
+        factType.set(obj, "specialApproval", true);
+        factType.set(obj, "cardCount", 100);
         kieSession.insert(obj);
         int count = kieSession.fireAllRules();
 
