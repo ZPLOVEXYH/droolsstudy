@@ -410,4 +410,19 @@ class DroolsstudyApplicationTests {
         System.out.println("匹配了规则数量：" + count);
         System.out.println(resMap);
     }
+
+    @Test
+    public void Test15() throws IllegalAccessException, InstantiationException {
+//        FactType factType = kieBase.getFactType("com.hly.drools.card", "CardChangeFee");
+        FactType factType = kieBase.getFactType("com.hly.drools.rate", "RechargeFee");
+        Object obj = factType.newInstance();
+        factType.set(obj, "rechargeAmount", 200);
+        kieSession.insert(obj);
+        int count = kieSession.fireAllRules();
+
+        Map<String, Object> resMap = factType.getAsMap(obj);
+
+        System.out.println("匹配了规则数量：" + count);
+        System.out.println(resMap);
+    }
 }

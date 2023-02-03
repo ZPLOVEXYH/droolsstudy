@@ -1,0 +1,60 @@
+package com.hly.drools.rate
+dialect "java"
+/**
+充值手续费
+*/
+declare RechargeFee
+    //充值金额
+    rechargeAmount: Integer
+    //手续费
+    serviceCharge: Integer
+end
+
+rule "recharge_Fee_rule_1"
+    when $s: RechargeFee(rechargeAmount <= 10)
+    then
+        $s.setServiceCharge(0);
+        System.out.println("执行了recharge_Fee_rule_1");
+end
+
+rule "recharge_Fee_rule_2"
+    when $s: RechargeFee(rechargeAmount > 10 && rechargeAmount <= 400)
+    then
+        $s.setServiceCharge($s.getRechargeAmount()-10);
+        System.out.println("执行了recharge_Fee_rule_2");
+end
+
+rule "recharge_Fee_rule_3"
+    when $s: RechargeFee(rechargeAmount > 400 && rechargeAmount <= 100000)
+    then
+        $s.setServiceCharge(400);
+        System.out.println("执行了recharge_Fee_rule_3");
+end
+
+rule "recharge_Fee_rule_4"
+    when $s: RechargeFee(rechargeAmount > 100000 && rechargeAmount <= 300000)
+    then
+        $s.setServiceCharge(300);
+        System.out.println("执行了recharge_Fee_rule_4");
+end
+
+rule "recharge_Fee_rule_5"
+    when $s: RechargeFee(rechargeAmount > 300000 && rechargeAmount <= 500000)
+    then
+        $s.setServiceCharge(200);
+        System.out.println("执行了recharge_Fee_rule_5");
+end
+
+rule "recharge_Fee_rule_6"
+    when $s: RechargeFee(rechargeAmount > 500000 && rechargeAmount <= 1000000)
+    then
+        $s.setServiceCharge(100);
+        System.out.println("执行了recharge_Fee_rule_6");
+end
+
+rule "recharge_Fee_rule_7"
+    when $s: RechargeFee(rechargeAmount > 1000000)
+    then
+        $s.setServiceCharge(0);
+        System.out.println("执行了recharge_Fee_rule_7");
+end

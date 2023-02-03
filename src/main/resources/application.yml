@@ -1,0 +1,10 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /hly_drools
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.0.2.42:3306/hly_base_info?serverTimezone=Asia/Shanghai&characterEncoding=utf-8&characterSetResults=utf8&useSSL=true
+    username: operator
+    password: BwEhgbCHSudAMK
